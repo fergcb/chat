@@ -35,7 +35,7 @@ socket.on('user-join', ({ user, users }) => {
 socket.on('user-leave', ({ user, users }) => {
   const $message = document.createElement('div')
   $message.classList.add('message', 'system')
-  $message.textContent = `${user.nick} (${id}) left the room.`
+  $message.textContent = `${user.nick} (${user.id}) left the room.`
   $messageList.appendChild($message)
   $messageList.scrollTo(0, $messageList.scrollHeight)
   syncUsers(users)
