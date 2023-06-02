@@ -1,0 +1,133 @@
+:root {
+  --bg01: #222;
+  --bg02: #333;
+  --bg03: #444;
+  --txt01: #eee;
+  --txt02: #ddd;
+  --border01: #555;
+  --accent: #00bb79;
+}
+
+body {
+  margin: 0;
+
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-rows: 100vh;
+
+  font-family: 'Fira Sans', sans-serif;
+
+  background: var(--bg01);
+  color: var(--txt01);
+}
+
+#rooms {
+  grid-area: 1 / 1 / 2 / 2;
+  background: var(--bg02);
+  border-right: 1px solid var(--border01);
+}
+
+#chat {
+  grid-area: 1 / 2 / 2 / 3;
+
+  display: flex;
+  flex-direction: column;
+}
+
+#chat>#messages {
+  flex-grow: 1;
+  overflow-y: scroll;
+}
+
+#chat>#messages>.message {
+  padding: 0.5rem;
+}
+
+#chat>#messages>.message>.user {
+  font-weight: bold;
+  color: var(--accent);
+}
+
+#chat>#messages>.message>.user::after {
+  content: ':\00a0';
+  color: var(--txt02);
+}
+
+#chat>#chatBox {
+  width: 100%;
+  background: var(--bg02);
+  display: flex;
+  padding: 0.5rem;
+}
+
+#chat>#chatBox>#textInput {
+  flex-grow: 1;
+  background: var(--bg01);
+  border-radius: 0.365rem;
+  border: 1px solid var(--border01);
+  color: var(--txt01);
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 16px;
+  padding: 0.5rem;
+}
+
+#chat>#chatBox>button {
+  cursor: pointer;
+  color: var(--accent);
+  background: transparent;
+  border: none;
+  width: 3rem;
+  margin-left: 1rem;
+  margin-right: 2rem;
+  transition: background-color 150ms ease-in-out;
+  border-radius: 0.365rem;
+}
+
+#chat>#chatBox>button:hover {
+  background: var(--bg03);
+}
+
+#users {
+  grid-area: 1 / 3 / 2 / 4;
+  background: var(--bg02);
+  border-left: 1px solid var(--border01);
+  padding: 1rem;
+}
+
+#users>h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+#users>#usersList {
+  margin: 0;
+  padding: 1rem;
+  margin-top: 1rem;
+  list-style: none;
+  background: var(--bg01);
+  border-radius: 0.365rem;
+  border: 1px solid var(--border01);
+}
+
+#users>#usersList>li {
+  margin-bottom: 0.25rem;
+}
+
+* {
+  scrollbar-width: auto;
+  scrollbar-color: var(--border01) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 14px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--border01);
+  border-radius: 6px;
+  border: 4px solid var(--bg01);
+}
