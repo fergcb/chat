@@ -1,11 +1,11 @@
 :root {
-  --bg01: #222;
-  --bg02: #333;
-  --bg03: #444;
-  --txt01: #eee;
-  --txt02: #ddd;
-  --border01: #555;
-  --accent: #00bb79;
+  --bg01: #212529;
+  --bg02: #2B3035;
+  --bg03: #343A40;
+  --txt01: #f8f9fa;
+  --txt02: #adb5bd;
+  --border01: #495057;
+  --accent: #20c997;
 }
 
 body {
@@ -19,12 +19,6 @@ body {
 
   background: var(--bg01);
   color: var(--txt01);
-}
-
-#rooms {
-  grid-area: 1 / 1 / 2 / 2;
-  background: var(--bg02);
-  border-right: 1px solid var(--border01);
 }
 
 #chat {
@@ -43,14 +37,15 @@ body {
   padding: 0.5rem;
 }
 
-#chat>#messages>.message>.user {
+#chat>#messages>.message>.author {
   font-weight: bold;
   color: var(--accent);
 }
 
-#chat>#messages>.message>.user::after {
-  content: ':\00a0';
+#chat>#messages>.message>.author::after {
+  content: ':';
   color: var(--txt02);
+  margin-right: 1ch;
 }
 
 #chat>#chatBox {
@@ -89,17 +84,28 @@ body {
 
 #users {
   grid-area: 1 / 3 / 2 / 4;
-  background: var(--bg02);
   border-left: 1px solid var(--border01);
+}
+
+#rooms {
+  grid-area: 1 / 1 / 2 / 2;
+  border-right: 1px solid var(--border01);
+}
+
+#users,
+#rooms {
+  background: var(--bg02);
   padding: 1rem;
 }
 
-#users>h2 {
+#users>h2,
+#rooms>h2 {
   margin: 0;
   font-size: 20px;
 }
 
-#users>#usersList {
+#users>#usersList,
+#rooms>#roomsList {
   margin: 0;
   padding: 1rem;
   margin-top: 1rem;
@@ -109,8 +115,41 @@ body {
   border: 1px solid var(--border01);
 }
 
-#users>#usersList>li {
+#users>#usersList>li,
+#rooms>#roomsList>li {
   margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+}
+
+#rooms>#roomsList>li>.name {
+  font-weight: 900;
+  letter-spacing: 0.05ch;
+}
+
+#rooms>#roomsList>li>.userCount {
+  margin-left: auto;
+  padding: 0.25rem 0.5rem;
+  background: var(--bg03);
+  border-radius: 0.365rem;
+  border: 1px solid var(--border01);
+}
+
+#users>#usersList>li.me>.nick {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+#users>#usersList>li>.note {
+  font-size: 14px;
+  color: var(--txt02);
+  margin-left: 1ch;
+}
+
+#users>#usersList>li>.id {
+  font-size: 14px;
+  color: var(--txt02);
+  margin-left: auto;
 }
 
 * {
