@@ -9,6 +9,7 @@ import { Collection } from "npm:@discordjs/collection";
 import User from "./User.ts";
 import Room from "./Room.ts";
 import { log } from "./logger.ts";
+import { handleCommand } from "./commands.ts";
 
 const app = new Application();
 const server = new Server();
@@ -46,7 +47,7 @@ server.on("connection", (socket) => {
 
     const room = rooms.get(roomName)!;
 
-    room.emit("broadcast-message", {
+    handleCommand(room, user, message) || room.emit("broadcast-message", {
       user: user.toJSON(),
       message,
       room: room.toJSON(),

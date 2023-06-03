@@ -18,11 +18,11 @@ function generateNick() {
 }
 
 export default class User {
-  private readonly rooms: Collection<string, Room>;
+  public readonly rooms: Collection<string, Room>;
 
   constructor(
-    public readonly server: Server,
-    public readonly socket: Socket,
+    private readonly server: Server,
+    private readonly socket: Socket,
     public readonly id: string = generateId(),
     public nick: string = generateNick(),
   ) {
@@ -31,6 +31,11 @@ export default class User {
 
   public get identity() {
     return `${this.nick} (${this.id})`;
+  }
+
+  // deno-lint-ignore no-explicit-any
+  public emit(event: string, ...args: any[]) {
+    this.socket.emit(event, ...args);
   }
 
   public join(room: Room) {
@@ -51,6 +56,21 @@ export default class User {
 
   public disconnect() {
     this.rooms.forEach((room) => room.removeUser(this));
+  }
+
+  public setNick(newNick: string) {
+    const oldNick = this.nick;
+    this.nick = newNick;
+    this.rooms.forEach((room) => {
+      room.emit("broadcast-message", {
+        room: room.toJSON(),
+        message:
+          `<teal,bold:${oldNick}:> <gray:(${this.id}):> set their nickname to <teal,bold:${newNick}:>`,
+      });
+      room.users.forEach((user) =>
+        user.emit("update-user", { user: this.toJSON() })
+      );
+    });
   }
 
   public toJSON() {

@@ -10,6 +10,7 @@ export default class Room {
     public readonly users = new Collection<string, User>(),
   ) {}
 
+  // deno-lint-ignore no-explicit-any
   public emit(event: string, ...args: any[]) {
     this.server.to(this.name).emit(event, ...args);
   }
