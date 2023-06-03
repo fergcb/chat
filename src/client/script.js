@@ -10,7 +10,10 @@ const $messageList = document.querySelector("#messages");
 const $chatBox = document.querySelector("#chatBox");
 const $textInput = document.querySelector("#textInput");
 
-function createComponent(tag, { content = "", classes = [], children = [], html = '' }) {
+function createComponent(
+  tag,
+  { content = "", classes = [], children = [], html = "" },
+) {
   const el = document.createElement(tag);
   el.classList.add(...classes);
   if (content !== "") {
@@ -18,45 +21,47 @@ function createComponent(tag, { content = "", classes = [], children = [], html 
   } else if (children.length > 0) {
     children.forEach((child) => el.append(child));
   } else if (html !== "") {
-    el.innerHTML = html
+    el.innerHTML = html;
   }
 
   return el;
 }
 
 const colors = {
-  'red': '#fa5252',
-  'orange': '#ff922b',
-  'yellow': '#fcc419',
-  'green': '#94d82d',
-  'teal': '#20c997',
-  'cyan': '#22b8cf',
-  'blue': '#228be6',
-  'purple': '#be4bdb',
-  'pink': '#e64980',
-  'white': '#f8f9fa',
-  'gray': '#868e96',
-  'grey': '#868e96',
-  'black': '#212529',
-}
+  "red": "#fa5252",
+  "orange": "#ff922b",
+  "yellow": "#fcc419",
+  "green": "#94d82d",
+  "teal": "#20c997",
+  "cyan": "#22b8cf",
+  "blue": "#228be6",
+  "purple": "#be4bdb",
+  "pink": "#e64980",
+  "white": "#f8f9fa",
+  "gray": "#868e96",
+  "grey": "#868e96",
+  "black": "#212529",
+};
 
 const miscStyles = {
-  'bold': 'font-weight: 700',
-  'italic': 'font-style: italic',
-  'underline': 'text-decoration: underline',
-}
+  "bold": "font-weight: 700",
+  "italic": "font-style: italic",
+  "underline": "text-decoration: underline",
+};
 
 function parseContent(content) {
-  return content.replaceAll(/<([a-z]+(?:,[a-z]+)*):(.*?):>/g, (_, styles, text) => {
-    styles = styles.split(',')
-    const styleAttr = styles.flatMap(style => {
-      if (style in colors) return [`color: ${colors[style]}`]
-      else if (style in miscStyles) return [miscStyles[style]]
-      else return []
-    }).join('; ')
-    console.log(styleAttr)
-    return `<span style="${styleAttr}">${text}</span>`
-  })
+  return content.replaceAll(
+    /<([a-z]+(?:,[a-z]+)*):(.*?):>/g,
+    (_, styles, text) => {
+      styles = styles.split(",");
+      const styleAttr = styles.flatMap((style) => {
+        if (style in colors) return [`color: ${colors[style]}`];
+        else if (style in miscStyles) return [miscStyles[style]];
+        else return [];
+      }).join("; ");
+      return `<span style="${styleAttr}">${text}</span>`;
+    },
+  );
 }
 
 let me;
@@ -132,15 +137,18 @@ function addMessage(room, message) {
 function showMessage({ author, content }) {
   if (author !== undefined) {
     $messageList.appendChild(createComponent("div", {
-      classes: ['message'],
+      classes: ["message"],
       children: [
         createComponent("span", { classes: ["author"], content: author.nick }),
-        createComponent("span", { classes: ["content"], html: parseContent(content) }),
+        createComponent("span", {
+          classes: ["content"],
+          html: parseContent(content),
+        }),
       ],
     }));
   } else {
     $messageList.appendChild(createComponent("div", {
-      classes: ['message', 'system'],
+      classes: ["message", "system"],
       html: parseContent(content),
     }));
   }
@@ -161,31 +169,35 @@ socket.on("sync-user", (user) => {
 
 socket.on("update-user", ({ user }) => {
   if (!users.has(user.id)) {
-    console.log(`Unknown user ${user.identity}.`)
-    return
+    console.log(`Unknown user ${user.identity}.`);
+    return;
   }
 
-  users.set(user.id, user)
+  users.set(user.id, user);
 
-  showUsers()
-})
+  showUsers();
+});
 
 socket.on("user-joined", ({ room, user }) => {
   if (user.id === me.id) currentRoom = room.name;
   updateRoom(room);
-  addMessage(room, { content: `<teal,bold:${user.nick}:> <gray:(${user.id}):> joined the room.` })
+  addMessage(room, {
+    content: `<teal,bold:${user.nick}:> <gray:(${user.id}):> joined the room.`,
+  });
 });
 
 socket.on("user-left", ({ room, user }) => {
   if (user.id === me.id && currentRoom === room.name) currentRoom = undefined;
   updateRoom(room);
-  addMessage(room, { content: `<teal,bold:${user.nick}:> <gray:(${user.id}):> left the room.` })
+  addMessage(room, {
+    content: `<teal,bold:${user.nick}:> <gray:(${user.id}):> left the room.`,
+  });
 });
 
 socket.on("broadcast-message", ({ room, user, message }) => {
-  addMessage(room, { author: user, content: message })
+  addMessage(room, { author: user, content: message });
 });
 
 socket.on("whisper", ({ message }) => {
-  addMessage(rooms.get(currentRoom), { content: message })
-})
+  addMessage(rooms.get(currentRoom), { content: message });
+});
