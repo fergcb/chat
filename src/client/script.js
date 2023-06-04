@@ -4,12 +4,24 @@ import { Collection } from "https://esm.sh/@discordjs/collection@1.5.1";
 
 const socket = io();
 
+const $rooms = document.querySelector("#rooms")
 const $roomsList = document.querySelector("#roomsList");
+const $toggleRooms = document.querySelector("#toggleRooms");
+const $users = document.querySelector("#users")
 const $usersList = document.querySelector("#usersList");
+const $toggleUsers = document.querySelector("#toggleUsers");
 const $messageList = document.querySelector("#messages");
 const $chatBox = document.querySelector("#chatBox");
 const $textInput = document.querySelector("#textInput");
 const $currentRoom = document.querySelector("#currentRoom");
+
+$toggleRooms.addEventListener('click', () => {
+  $rooms.classList.toggle('expanded')
+})
+
+$toggleUsers.addEventListener('click', () => {
+  $users.classList.toggle('expanded')
+})
 
 function createComponent(
   tag,

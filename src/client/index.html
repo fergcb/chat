@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="viewport" content="width=500, initial-scale=1" />
+    
     <title>Chat App</title>
+    
     <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,700,1,200" />
   </head>
   <body>
     <aside id="rooms">
       <h2>Rooms</h2>
-      <ul id="roomsList">
-        
-      </ul>
+      <ul id="roomsList"></ul>
+      <button id="toggleRooms">
+        <span class="material-symbols-outlined">meeting_room</span>
+      </button>
     </aside>
 
     <main id="chat">
@@ -28,9 +32,10 @@
 
     <aside id="users">
       <h2>Users</h2>
-      <ul id="usersList">
-
-      </ul>
+      <ul id="usersList"></ul>
+      <button id="toggleUsers">
+        <span class="material-symbols-outlined">group</span>
+      </button>
     </aside>
     
     <script src="/script.js" type="module"></script>
