@@ -154,6 +154,7 @@ body {
   background: var(--bg02);
   display: flex;
   padding: 0.5rem;
+  flex-shrink: 0;
 }
 
 #chat>#chatBox>#textInput {
