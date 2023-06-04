@@ -14,6 +14,11 @@ const $messageList = document.querySelector("#messages");
 const $chatBox = document.querySelector("#chatBox");
 const $textInput = document.querySelector("#textInput");
 const $currentRoom = document.querySelector("#currentRoom");
+const $metaViewport = document.querySelector("#metaViewport");
+
+globalThis.addEventListener('resize', () => {
+  $metaViewport.setAttribute('content', `width=device-width, height=${window.innerHeight}, initial-scale=1, user-scalable=no`)
+})
 
 $toggleRooms.addEventListener('click', () => {
   $rooms.classList.toggle('expanded')
