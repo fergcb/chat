@@ -9,10 +9,11 @@ const $usersList = document.querySelector("#usersList");
 const $messageList = document.querySelector("#messages");
 const $chatBox = document.querySelector("#chatBox");
 const $textInput = document.querySelector("#textInput");
+const $currentRoom = document.querySelector("#currentRoom");
 
 function createComponent(
   tag,
-  { content = "", classes = [], children = [], html = "" },
+  { content = "", classes = [], children = [], html = "", onClick },
 ) {
   const el = document.createElement(tag);
   el.classList.add(...classes);
@@ -23,6 +24,8 @@ function createComponent(
   } else if (html !== "") {
     el.innerHTML = html;
   }
+
+  if (onClick !== undefined) el.addEventListener("click", onClick);
 
   return el;
 }
@@ -101,9 +104,23 @@ function sweepRooms(newRooms) {
 
 function updateRoom(room, repaint = true) {
   room.messages = rooms.get(room.name)?.messages ?? [];
+  room.hasUnreadMessages = room.hasUnreadMessages ?? false;
   rooms.set(room.name, room);
   if (room.name === currentRoom) updateUsers(room.users);
   if (repaint) showRooms();
+}
+
+function setCurrentRoom(name) {
+  if (!rooms.has(name)) {
+    console.log(`No such room "${name}"`);
+    return;
+  }
+  const room = rooms.get(name);
+  currentRoom = room.name;
+  $currentRoom.textContent = name;
+  room.hasUnreadMessages = false;
+  updateRoom(room);
+  showMessages();
 }
 
 function showRooms() {
@@ -112,10 +129,20 @@ function showRooms() {
       createComponent("li", {
         classes: room.name === currentRoom ? ["current"] : [],
         children: [
-          createComponent("span", { content: room.name, classes: ["name"] }),
-          createComponent("span", {
-            content: room.userCount,
-            classes: ["userCount"],
+          createComponent("button", {
+            onClick: () => {
+              setCurrentRoom(room.name)
+            },
+            children: [
+              createComponent("span", {
+                content: room.name,
+                classes: ["name", ...(room.hasUnreadMessages ? ["unread"] : [])],
+              }),
+              createComponent("span", {
+                content: room.userCount,
+                classes: ["userCount"],
+              }),
+            ],
           }),
         ],
       })
@@ -132,11 +159,15 @@ function addMessage(room, message) {
   rooms.get(room.name).messages.push(message);
 
   if (room.name === currentRoom) showMessage(message);
+  else {
+    rooms.get(room.name).hasUnreadMessages = true
+    showRooms()
+  }
 }
 
-function showMessage({ author, content }) {
+function createMessageElement({ author, content }) {
   if (author !== undefined) {
-    $messageList.appendChild(createComponent("div", {
+    return createComponent("div", {
       classes: ["message"],
       children: [
         createComponent("span", { classes: ["author"], content: author.nick }),
@@ -145,13 +176,21 @@ function showMessage({ author, content }) {
           html: parseContent(content),
         }),
       ],
-    }));
-  } else {
-    $messageList.appendChild(createComponent("div", {
-      classes: ["message", "system"],
-      html: parseContent(content),
-    }));
+    });
   }
+  return createComponent("div", {
+    classes: ["message", "system"],
+    html: parseContent(content),
+  });
+}
+
+function showMessages() {
+  const room = rooms.get(currentRoom);
+  $messageList.replaceChildren(...room.messages.map(createMessageElement));
+}
+
+function showMessage(message) {
+  $messageList.appendChild(createMessageElement(message));
 }
 
 $chatBox.addEventListener("submit", (evt) => {
@@ -179,15 +218,15 @@ socket.on("update-user", ({ user }) => {
 });
 
 socket.on("user-joined", ({ room, user }) => {
-  if (user.id === me.id) currentRoom = room.name;
   updateRoom(room);
+  if (user.id === me.id) setCurrentRoom(room.name);
   addMessage(room, {
     content: `<teal,bold:${user.nick}:> <gray:(${user.id}):> joined the room.`,
   });
 });
 
 socket.on("user-left", ({ room, user }) => {
-  if (user.id === me.id && currentRoom === room.name) currentRoom = undefined;
+  if (user.id === me.id && currentRoom === room.name) setCurrentRoom(undefined);
   updateRoom(room);
   addMessage(room, {
     content: `<teal,bold:${user.nick}:> <gray:(${user.id}):> left the room.`,

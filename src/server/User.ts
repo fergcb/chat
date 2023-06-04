@@ -1,7 +1,5 @@
-import {
-  type Server,
-  type Socket,
-} from "https://deno.land/x/socket_io@0.2.0/mod.ts";
+import { type Socket } from "https://deno.land/x/socket_io@0.2.0/mod.ts";
+import type Server from "./Server.ts";
 import type Room from "./Room.ts";
 
 import { customAlphabet } from "npm:nanoid";

@@ -1,18 +1,19 @@
 import { serve } from "https://deno.land/std@0.150.0/http/server.ts";
-import { Server } from "https://deno.land/x/socket_io@0.2.0/mod.ts";
+import { Server as IOServer } from "https://deno.land/x/socket_io@0.2.0/mod.ts";
 import {
   Application,
   Context,
   send,
 } from "https://deno.land/x/oak@v12.5.0/mod.ts";
-import { Collection } from "npm:@discordjs/collection";
+import Server from "./Server.ts";
 import User from "./User.ts";
 import Room from "./Room.ts";
 import { log } from "./logger.ts";
 import { handleCommand } from "./commands.ts";
 
 const app = new Application();
-const server = new Server();
+const io = new IOServer();
+const server = new Server(io);
 
 app.use(async (ctx: Context) => {
   return await send(ctx, ctx.request.url.pathname, {
@@ -21,12 +22,10 @@ app.use(async (ctx: Context) => {
   });
 });
 
-const rooms = new Collection<string, Room>();
-
 const world = new Room(server, "world");
-rooms.set("world", world);
+server.rooms.set("world", world);
 
-server.on("connection", (socket) => {
+io.on("connection", (socket) => {
   const user = new User(server, socket);
   log(`<cyan:${user.identity}:> connected.`);
 
@@ -40,22 +39,23 @@ server.on("connection", (socket) => {
 
   socket.on("send-message", ({ message, room: roomName }) => {
     log(`<cyan:${user.identity}:> in <yellow:${roomName}:>: ${message}`);
-    if (!rooms.has(roomName)) {
+    if (!server.rooms.has(roomName)) {
       log("<yellow:${roomName}:> doesn't exist.");
       return;
     }
 
-    const room = rooms.get(roomName)!;
+    const room = server.rooms.get(roomName)!;
 
-    handleCommand(room, user, message) || room.emit("broadcast-message", {
-      user: user.toJSON(),
-      message,
-      room: room.toJSON(),
-    });
+    handleCommand(server, room, user, message) ||
+      room.emit("broadcast-message", {
+        user: user.toJSON(),
+        message,
+        room: room.toJSON(),
+      });
   });
 });
 
-const handler = server.handler(async (req) => {
+const handler = io.handler(async (req) => {
   return await app.handle(req) || new Response(null, { status: 500 });
 });
 

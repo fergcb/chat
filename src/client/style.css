@@ -28,13 +28,17 @@ body {
   flex-direction: column;
 }
 
+#chat>#currentRoom {
+  padding-inline: 1rem;
+}
+
 #chat>#messages {
   flex-grow: 1;
   overflow-y: scroll;
 }
 
 #chat>#messages>.message {
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
 }
 
 #chat>#messages>.message>.author {
@@ -122,12 +126,45 @@ body {
   align-items: center;
 }
 
-#rooms>#roomsList>li>.name {
+#rooms>#roomsList>li>button {
+  border: none;
+  background: transparent;
+  display: block;
+  color: var(--txt01);
+  font-size: 1rem;
+  font-family: 'Fira Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 150ms ease-in-out;
+  padding: 0.5rem;
+  border-radius: 0.365rem;
+}
+
+#rooms>#roomsList>li.current>button,
+#rooms>#roomsList>li>button:hover {
+  background-color: var(--bg03)
+}
+
+#rooms>#roomsList>li>button>.name.unread::after {
+  content: '';
+  display: inline-block;
+  width: 0.5rem;
+  aspect-ratio: 1;
+  background-color: #20c997;
+  border-radius: 50%;
+  position: relative;
+  top: -2px;
+  margin-left: 0.5ch;
+}
+
+#rooms>#roomsList>li.current>button>.name {
   font-weight: 900;
   letter-spacing: 0.05ch;
 }
 
-#rooms>#roomsList>li>.userCount {
+#rooms>#roomsList>li>button>.userCount {
   margin-left: auto;
   padding: 0.25rem 0.5rem;
   background: var(--bg03);

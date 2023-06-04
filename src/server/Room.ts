@@ -1,6 +1,6 @@
 import { Collection } from "npm:@discordjs/collection";
 import type User from "./User.ts";
-import { type Server } from "https://deno.land/x/socket_io@0.2.0/mod.ts";
+import type Server from "./Server.ts";
 import { log } from "./logger.ts";
 
 export default class Room {
@@ -12,7 +12,7 @@ export default class Room {
 
   // deno-lint-ignore no-explicit-any
   public emit(event: string, ...args: any[]) {
-    this.server.to(this.name).emit(event, ...args);
+    this.server.io.to(this.name).emit(event, ...args);
   }
 
   public addUser(user: User) {
