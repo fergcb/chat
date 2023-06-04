@@ -131,12 +131,15 @@ function showRooms() {
         children: [
           createComponent("button", {
             onClick: () => {
-              setCurrentRoom(room.name)
+              setCurrentRoom(room.name);
             },
             children: [
               createComponent("span", {
                 content: room.name,
-                classes: ["name", ...(room.hasUnreadMessages ? ["unread"] : [])],
+                classes: [
+                  "name",
+                  ...(room.hasUnreadMessages ? ["unread"] : []),
+                ],
               }),
               createComponent("span", {
                 content: room.userCount,
@@ -160,8 +163,8 @@ function addMessage(room, message) {
 
   if (room.name === currentRoom) showMessage(message);
   else {
-    rooms.get(room.name).hasUnreadMessages = true
-    showRooms()
+    rooms.get(room.name).hasUnreadMessages = true;
+    showRooms();
   }
 }
 
