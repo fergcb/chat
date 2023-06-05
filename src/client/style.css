@@ -25,98 +25,6 @@ body {
   color: var(--txt01);
 }
 
-@media only screen and (max-width: 900px) {
-  body {
-    display: unset;
-    overflow: hidden;
-    max-height: 100vh;
-    width: 100vw;
-    max-width: 100%;
-  }
-
-  #chat {
-    width: 100vw;
-    max-width: 100%;
-  }
-
-  #chat,
-  #rooms,
-  #users {
-    height: 100dvh;
-    max-height: 100%;
-  }
-
-  #chat>#currentRoom {
-    margin-left: 4rem;
-  }
-
-  #rooms,
-  #users {
-    width: calc(100% - 5rem);
-    position: absolute;
-    top: 0;
-    box-shadow:
-      0px 0px 0px 0px rgba(0, 0, 0, 0.16),
-      0 0 0 5rem rgba(255, 255, 255, 0);
-    transition:
-      box-shadow 100ms 0ms linear,
-      transform 300ms 100ms ease-in-out;
-  }
-
-  #rooms {
-    transform: translateX(-100%);
-  }
-
-  #users {
-    right: 0;
-    transform: translateX(100%);
-  }
-
-  #rooms.expanded,
-  #users.expanded {
-    transform: translateX(0);
-    z-index: 1000;
-    box-shadow:
-      0px 0px 5px 5px rgba(0, 0, 0, 0.16),
-      0 0 0 5rem rgba(255, 255, 255, 0.1);
-    transition:
-      transform 300ms ease-in-out,
-      box-shadow 150ms 300ms linear;
-  }
-
-  #rooms>#toggleRooms,
-  #users>#toggleUsers {
-    border: none;
-    background: var(--bg02);
-    border: 1px solid var(--border01);
-    border-radius: 0.365rem;
-    position: absolute;
-    color: var(--txt02);
-    width: 3rem;
-    aspect-ratio: 1;
-    cursor: pointer;
-    transition-duration: 150ms;
-    transition-timing-function: ease-in-out;
-    transition-property: background-color, color;
-  }
-
-  #rooms>#toggleRooms:hover,
-  #users>#toggleUsers:hover {
-    background-color: var(--bg03);
-    color: var(--txt01);
-  }
-
-  #rooms>#toggleRooms {
-    top: 1rem;
-    left: calc(100% + 1rem);
-  }
-
-  #users>#toggleUsers {
-    top: 1rem;
-    right: calc(100% + 1rem);
-  }
-}
-
 #chat {
   grid-area: 1 / 2 / 2 / 3;
 
@@ -292,6 +200,48 @@ body {
   margin-left: auto;
 }
 
+#users>#help {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+}
+
+#users>#help>h2 {
+  font-size: 20px;
+  margin-bottom: 1rem;
+}
+
+#users>#help>ul {
+  padding-left: 2rem;
+  margin: 0;
+}
+
+#users>#help>ul>li+li {
+  margin-top: 0.75rem;
+}
+
+#users>#help>ul>li>.desc {
+  font-style: italic;
+  color: var(--txt02);
+  line-height: 1.35;
+}
+
+.box {
+  padding: 1rem;
+  background-color: var(--bg01);
+  border: 1px solid var(--border01);
+  border-radius: 0.365rem;
+}
+
+code {
+  font-family: 'Fira Code', monospace;
+  font-size: 1rem;
+  background-color: var(--bg03);
+  border: 1px solid var(--border01);
+  padding-inline: 0.25rem;
+  border-radius: 0.25rem;
+}
+
 * {
   scrollbar-width: auto;
   scrollbar-color: var(--border01) transparent;
@@ -309,4 +259,99 @@ body {
   background-color: var(--border01);
   border-radius: 6px;
   border: 4px solid var(--bg01);
+}
+
+@media only screen and (max-width: 900px) {
+  body {
+    display: unset;
+    overflow: hidden;
+    max-height: 100vh;
+    width: 100vw;
+    max-width: 100%;
+  }
+
+  #chat {
+    width: 100vw;
+    max-width: 100%;
+  }
+
+  #chat,
+  #rooms,
+  #users {
+    height: 100dvh;
+    max-height: 100%;
+  }
+
+  #chat>#currentRoom {
+    margin-left: 4rem;
+  }
+
+  #rooms,
+  #users {
+    width: calc(100% - 5rem);
+    position: absolute;
+    top: 0;
+    box-shadow:
+      0px 0px 0px 0px rgba(0, 0, 0, 0.16),
+      0 0 0 5rem rgba(255, 255, 255, 0);
+    transition:
+      box-shadow 100ms 0ms linear,
+      transform 300ms 100ms ease-in-out;
+  }
+
+  #rooms {
+    transform: translateX(-100%);
+  }
+
+  #users {
+    right: 0;
+    transform: translateX(100%);
+    display: flex;
+    flex-direction: column;
+  }
+
+  #rooms.expanded,
+  #users.expanded {
+    transform: translateX(0);
+    z-index: 1000;
+    box-shadow:
+      0px 0px 5px 5px rgba(0, 0, 0, 0.16),
+      0 0 0 5rem rgba(255, 255, 255, 0.1);
+    transition:
+      transform 300ms ease-in-out,
+      box-shadow 150ms 300ms linear;
+  }
+
+  #rooms>#toggleRooms,
+  #users>#toggleUsers {
+    border: none;
+    background: var(--bg02);
+    border: 1px solid var(--border01);
+    border-radius: 0.365rem;
+    position: absolute;
+    color: var(--txt02);
+    width: 3rem;
+    aspect-ratio: 1;
+    cursor: pointer;
+    transition-duration: 150ms;
+    transition-timing-function: ease-in-out;
+    transition-property: background-color, color;
+    display: block;
+  }
+
+  #rooms>#toggleRooms:hover,
+  #users>#toggleUsers:hover {
+    background-color: var(--bg03);
+    color: var(--txt01);
+  }
+
+  #rooms>#toggleRooms {
+    top: 1rem;
+    left: calc(100% + 1rem);
+  }
+
+  #users>#toggleUsers {
+    top: 1rem;
+    right: calc(100% + 1rem);
+  }
 }
