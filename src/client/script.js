@@ -234,6 +234,11 @@ socket.on("update-user", ({ user }) => {
   }
 
   users.set(user.id, user);
+  rooms.forEach(room => {
+    const idx = room.users.findIndex(u => u.id === user.id)
+    if (idx === -1) return
+    room.users.splice(idx, 1, user);
+  })
 
   showUsers();
 });
