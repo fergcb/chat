@@ -4,6 +4,12 @@ import type User from "./User.ts";
 
 const prefix = "/";
 
+function sendUsage(user: User, message: string) {
+  user.emit("whisper", {
+    message: `<bold,red:Usage::> <red,mono:${message}:>`,
+  });
+}
+
 export function handleCommand(
   server: Server,
   room: Room,
@@ -19,13 +25,13 @@ export function handleCommand(
 
   if (cmd === "nick") {
     if (args.length !== 1) {
-      sender.emit("whisper", { message: "Usage: /nick <nickname>" });
+      sendUsage(sender, "/nick <name>");
     } else {
       sender.setNick(args[0]);
     }
   } else if (cmd === "join") {
     if (args.length !== 1) {
-      sender.emit("whisper", { message: "Usage: /join <room>" });
+      sendUsage(sender, "/join <room>");
     } else {
       const name = args[0];
       try {

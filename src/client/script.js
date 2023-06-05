@@ -62,21 +62,25 @@ const miscStyles = {
   "bold": "font-weight: 700",
   "italic": "font-style: italic",
   "underline": "text-decoration: underline",
+  "mono": "font-family: 'Fira Code', 'Fira Mono', monospace;"
 };
 
 function parseContent(content) {
-  return content.replaceAll(
-    /<([a-z]+(?:,[a-z]+)*):(.*?):>/g,
-    (_, styles, text) => {
-      styles = styles.split(",");
-      const styleAttr = styles.flatMap((style) => {
-        if (style in colors) return [`color: ${colors[style]}`];
-        else if (style in miscStyles) return [miscStyles[style]];
-        else return [];
-      }).join("; ");
-      return `<span style="${styleAttr}">${text}</span>`;
-    },
-  );
+  return content
+    .replaceAll(/<(?![a-z]+(,[a-z]+)*:)/g, "&lt;")
+    .replaceAll(/(?<!:)>/g, "&gt;")
+    .replaceAll(
+      /<([a-z]+(?:,[a-z]+)*):(.*?):>/g,
+      (_, styles, text) => {
+        styles = styles.split(",");
+        const styleAttr = styles.flatMap((style) => {
+          if (style in colors) return [`color: ${colors[style]}`];
+          else if (style in miscStyles) return [miscStyles[style]];
+          else return [];
+        }).join("; ");
+        return `<span style="${styleAttr}">${text}</span>`;
+      },
+    );
 }
 
 let me;
