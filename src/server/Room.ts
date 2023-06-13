@@ -1,4 +1,4 @@
-import { Collection } from "npm:@discordjs/collection";
+import { Collection } from "npm:@discordjs/collection@1.5.1";
 import type User from "./User.ts";
 import type Server from "./Server.ts";
 import { log } from "./logger.ts";

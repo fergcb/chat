@@ -2,9 +2,9 @@ import { type Socket } from "https://deno.land/x/socket_io@0.2.0/mod.ts";
 import type Server from "./Server.ts";
 import type Room from "./Room.ts";
 
-import { customAlphabet } from "npm:nanoid";
-import { generateSlug } from "npm:random-word-slugs";
-import { Collection } from "npm:@discordjs/collection";
+import { customAlphabet } from "npm:nanoid@4.0.2";
+import { generateSlug } from "npm:random-word-slugs@0.1.7";
+import { Collection } from "npm:@discordjs/collection@1.5.1";
 
 const generateId = customAlphabet("abcdefghijklmnopqrstuvwxyz0123456789", 10);
 
