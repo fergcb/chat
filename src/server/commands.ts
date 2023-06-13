@@ -1,6 +1,7 @@
 import type Room from "./Room.ts";
 import Server from "./Server.ts";
 import type User from "./User.ts";
+import { roll } from "npm:miniroll@0.2.2";
 
 const prefix = "/";
 
@@ -49,6 +50,26 @@ export function handleCommand(
         });
       }
     }
+  } else if (cmd === "roll" || cmd === "r") {
+    if (args.length !== 1) {
+      sendUsage(sender, "/roll <dice>");
+    } else {
+      try {
+        const rolled = roll(args[0]);
+        room.emit("broadcast-message", {
+          room: room.toJSON(),
+          message:
+            `<teal,bold:${sender.nick}:> rolled a <pink,underline:${rolled.result}:>`,
+        });
+      } catch (_) {
+        sender.emit("whisper", {
+          message: "Failed to roll dice. " +
+            `Check that <red,bold,mono:${args[0]}:> is valid dice notation.`,
+        });
+      }
+    }
+  } else {
+    return false;
   }
 
   return true;
